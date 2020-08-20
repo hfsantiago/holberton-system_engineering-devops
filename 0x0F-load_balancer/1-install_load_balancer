@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Install your load balancer
+sudo apt-get -y update
+sudo apt-get -y install haproxy
+sudo chown  $USER:$USER /etc/haproxy/haproxy.cfg
+
+echo "
+frontend santiagolive
+    bind *:80
+    mode http
+    default_backend app
+backend app
+    balance roundrobin
+    server 1547-web-01 35.231.249.132:80 check
+    server 1547-web-02 54.174.199.122:80 check" >> /etc/haproxy/haproxy.cfg
+
+sudo service haproxy restart
